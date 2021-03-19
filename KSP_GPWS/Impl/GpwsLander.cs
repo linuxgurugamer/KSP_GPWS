@@ -172,6 +172,7 @@ namespace KSP_GPWS.Impl
         {
             if (CommonData.RadarAltitude > 0 && CommonData.RadarAltitude < float.PositiveInfinity)
             {
+#if false
                 if (checkMode_sinkRate())   // Decent Rate
                 { }
                 else if (checkMode_hSpeed())    // Horizontal Speed
@@ -184,6 +185,17 @@ namespace KSP_GPWS.Impl
                 {
                     Util.audio.MarkNotPlaying();
                 }
+#endif
+
+                if (!checkMode_sinkRate() &&   // Decent Rate
+                    !checkMode_hSpeed() &&    // Horizontal Speed
+                    !checkMode_retard() &&     // Throttle Check
+                    !checkMode_altitudeCallout() &&   // Altitude Callouts
+                    Util.audio.IsPlaying())
+                {
+                    Util.audio.MarkNotPlaying();
+                }
+
             }
         }
 

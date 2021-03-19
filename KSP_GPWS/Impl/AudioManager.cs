@@ -8,13 +8,14 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using KSP_GPWS.SimpleTypes;
+using static KSP_GPWS.Statics;
 
 namespace KSP_GPWS.Impl
 {
     public class AudioManager
     {
         private GameObject audioPlayer;
-        private string audioPrefix = "GPWS/Sounds";
+        private string audioPrefix = "GPWS/Sounds/";
         public float Volume { get; set; }
 
         private AudioSource asGPWS;
@@ -37,7 +38,7 @@ namespace KSP_GPWS.Impl
 
         public void Initialize()
         {
-            Volume = GameSettings.VOICE_VOLUME;
+            Volume = Math.Max(GameSettings.VOICE_VOLUME, GameSettings.SHIP_VOLUME);
 
             if (audioPlayer == null)
             {
@@ -57,7 +58,7 @@ namespace KSP_GPWS.Impl
 
         public void UpdateVolume()
         {
-            Volume = GameSettings.VOICE_VOLUME * Settings.Volume;
+            Volume = Math.Max(GameSettings.VOICE_VOLUME, GameSettings.SHIP_VOLUME) * Settings.Volume;
             asGPWS.volume = Volume;
         }
 
@@ -194,15 +195,16 @@ namespace KSP_GPWS.Impl
         {
             if (asGPWS.isPlaying)
             {
-                asGPWS.Stop();
+                return;
+                //asGPWS.Stop();
             }
 
-            asGPWS.clip = GameDatabase.Instance.GetAudioClip(audioPrefix + "/" + filename);
+            asGPWS.clip = GameDatabase.Instance.GetAudioClip(audioPrefix + filename);
             asGPWS.Play();
 
             _kindOfSound = kind;
             lastPlayTime = Time.time;
-            Util.Log(String.Format("play " + filename));
+            Log.Info(String.Format("play " + filename));
         }
 
         public void Stop()

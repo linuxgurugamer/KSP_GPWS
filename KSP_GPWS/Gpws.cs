@@ -10,6 +10,8 @@ using UnityEngine;
 using KSP_GPWS.SimpleTypes;
 using KSP_GPWS.Interfaces;
 using KSP_GPWS.Impl;
+using static KSP_GPWS.Statics;
+
 
 namespace KSP_GPWS
 {
@@ -83,6 +85,10 @@ namespace KSP_GPWS
                 {
                     return SimpleTypes.VesselType.NONE;
                 }
+
+                isPlane = _activeVessel.vesselType == VesselType.Plane;
+                isLander = !isPlane;
+#if false
                 if (plane != null && plane.GearCount > 0)
                 {
                     isPlane = true;
@@ -91,7 +97,7 @@ namespace KSP_GPWS
                 {
                     isLander = true;
                 }
-
+#endif
                 if ((isPlane && !Settings.ChangeVesselType) || (isLander && Settings.ChangeVesselType))
                 {
                     return SimpleTypes.VesselType.PLANE;
@@ -150,7 +156,7 @@ namespace KSP_GPWS
 
         public void Start()
         {
-            Util.Log("Start");
+            Log.Info("Start");
             Util.audio.Initialize();
 
             ActiveVessel = FlightGlobals.ActiveVessel;
@@ -225,7 +231,7 @@ namespace KSP_GPWS
             Speed = (float)Math.Sqrt(HorSpeed * HorSpeed + VerSpeed * VerSpeed);
 
             // check volume
-            if (Util.audio.Volume != GameSettings.VOICE_VOLUME * Settings.Volume)
+            if (Util.audio.Volume != Math.Max( GameSettings.VOICE_VOLUME, GameSettings.SHIP_VOLUME) * Settings.Volume)
             {
                 Util.audio.UpdateVolume();
             }
@@ -260,13 +266,14 @@ namespace KSP_GPWS
             gpwsFunc.UpdateGPWS();
         }
 
-        public void Update()
+        bool doThisCycle = true;
+        public void FixedUpdate()
         {
-            if (PreUpdate())
+            if (doThisCycle && PreUpdate())
             {
                 UpdateGPWS();
             }
-
+            doThisCycle = !doThisCycle;
             saveData();
         }
 

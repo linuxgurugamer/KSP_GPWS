@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using KSP_GPWS.Interfaces;
 using KSP_GPWS.SimpleTypes;
+using static KSP_GPWS.Statics;
 
 namespace KSP_GPWS.Impl
 {
@@ -355,24 +356,15 @@ namespace KSP_GPWS.Impl
             }
             else if (CommonData.RadarAltitude > 0 && CommonData.RadarAltitude < float.PositiveInfinity) // flying
             {
-                if (checkMode_1())  // Excessive Decent Rate
-                { }
-                else if (checkMode_2())  // Excessive Closure to Terrain
-                { }
-                else if (checkMode_3())  // Altitude Loss After TakeOff
-                { }
-                else if (checkMode_4())  // Unsafe Terrain Clearance
-                { }
-                else if (checkMode_Traffic())  // Traffic
-                { }
-                else if (checkMode_6())  // Advisory Callout
-                { }
-                // other
-                if (checkMode_Stall())     // Stall
-                { }
-                if (checkMode_GearUp())
-                { }
-                if (!Util.audio.IsPlaying())
+                if (!checkMode_1() &&  // Excessive Decent Rate
+                    !checkMode_2() &&  // Excessive Closure to Terrain
+                    !checkMode_3() &&  // Altitude Loss After TakeOff
+                    !checkMode_4() &&   // Unsafe Terrain Clearance
+                    !checkMode_Traffic() &&   // Traffic
+                    !checkMode_6() &&   // Advisory Callout
+                    !checkMode_Stall() &&      // Stall
+                    !checkMode_GearUp() &&
+                    Util.audio.IsPlaying())
                 {
                     Util.audio.MarkNotPlaying();
                 }
@@ -708,7 +700,7 @@ namespace KSP_GPWS.Impl
             {
                 float checkGearUpTime = 5;  // check at 5s
                 if ((CommonData.CurrentTime - CommonData.TakeOffTime) > checkGearUpTime
-                    && (CommonData.LastTime - CommonData.TakeOffTime) < checkGearUpTime
+                    && (CommonData.LastTime - CommonData.TakeOffTime) < checkGearUpTime + 2
                     && isGearDown)
                 {
                     if (CommonData.VerSpeed >= 0)   // vspeed > 0

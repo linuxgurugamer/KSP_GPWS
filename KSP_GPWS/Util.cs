@@ -11,6 +11,7 @@ using UnityEngine;
 using KSP_GPWS.SimpleTypes;
 using KSP_GPWS.Impl;
 using ModuleWheels;
+using static KSP_GPWS.Statics;
 
 namespace KSP_GPWS
 {
@@ -36,7 +37,7 @@ namespace KSP_GPWS
                 return _audio;
             }
         }
-        private static AudioManager _audio = new AudioManager();
+        internal static AudioManager _audio; // = new AudioManager();
 
         /// <summary>
         /// XInput
@@ -124,9 +125,9 @@ namespace KSP_GPWS
 
                 if (p.Modules.Contains<GPWSGear>() || isModuleWheelGear)
                 {
-                    Util.Log("found one!!!");
+                    Log.Info("found one!!!");
                     gears.Add(p);
-                    Log(String.Format("find {0} in {1}", p.name, p.vessel.name));
+                    Log.Info(String.Format("find {0} in {1}", p.name, p.vessel.name));
                 }
             }
         }
@@ -345,11 +346,6 @@ namespace KSP_GPWS
             {
                 return "";
             }
-        }
-
-        public static void Log(String msg)
-        {
-            UnityEngine.Debug.Log("[GPWS]Info: " + msg);
         }
     }
 }

@@ -2,38 +2,54 @@
 // License: CC-BY-NC-SA
 // Author: bss, 2015
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
-using KSP_GPWS.Interfaces;
+using ToolbarControl_NS;
 
-namespace KSP_GPWS.UI
+namespace KSP_GPWS
 {
     [KSPAddon(KSPAddon.Startup.Flight, false)]
     class GuiToolbarBtn : MonoBehaviour
     {
-        private IButton btn = null;
+        ToolbarControl toolbarControl;
 
+
+        internal const string MODNAME = "GPWS";
+        internal const string MODID = "GPWS";
         public void Awake()
         {
-            if (Settings.UseBlizzy78Toolbar && ToolbarManager.ToolbarAvailable)
+            if (toolbarControl == null)
             {
-                btn = ToolbarManager.Instance.add("GPWS", "GPWSBtn");
-                btn.TexturePath = "GPWS/gpws";
-                btn.ToolTip = "GPWS settings";
-                btn.Visibility = new GameScenesVisibility(GameScenes.FLIGHT);
-                btn.OnClick += (e) => SettingGui.toggleSettingGui();
+                GameObject gameObject = new GameObject();
+                toolbarControl = gameObject.AddComponent<ToolbarControl>();
+                toolbarControl.AddToAllToolbars(ToggleOn, ToggleOff,
+                    KSP.UI.Screens.ApplicationLauncher.AppScenes.FLIGHT,
+                    MODID,
+                    "GPWSBtn",
+                    "GPWS/PluginData/gpws",
+                    "GPWS/PluginData/gpws",
+                    MODNAME
+                );
             }
+
+            void ToggleOn()
+            {
+                SettingGui.toggleSettingGui(true);
+                //appBtn.SetFalse(false);
+            }
+            void ToggleOff()
+            {
+                SettingGui.toggleSettingGui(false);
+                //appBtn.SetFalse(false);
+            }
+
         }
 
         public void OnDestroy()
         {
-            if (btn != null)
+            if (toolbarControl != null)
             {
-                btn.Destroy();
-                btn = null;
+                toolbarControl.OnDestroy();
+                Destroy(toolbarControl);
             }
         }
     }

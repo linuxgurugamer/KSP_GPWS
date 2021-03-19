@@ -20,11 +20,13 @@ namespace KSP_GPWS
         {
             // load settings when game start
             Settings.LoadSettings();
+#if false
             // check toolbar
             if (Settings.UseBlizzy78Toolbar && !ToolbarManager.ToolbarAvailable)
             {
                 Util.Log("Blizzy78 Toolbar not available");
             }
+#endif
             Gpws.InitializeGPWSFunctions();
         }
     }
@@ -84,7 +86,7 @@ namespace KSP_GPWS
 
         public static Rect guiwindowPosition = new Rect(100, 100, 100, 50);
         public static bool showConfigs = true;  // show lower part of the setting GUI
-        public static bool guiIsActive = false;
+      public static bool guiIsActive = false;
 
         public static void LoadSettings()
         {
@@ -94,7 +96,7 @@ namespace KSP_GPWS
 
         private static void LoadFromCfg()
         {
-            ConfigNode node = ConfigNode.Load(KSPUtil.ApplicationRootPath + "GameData/GPWS/settings.cfg");
+            ConfigNode node = ConfigNode.Load(KSPUtil.ApplicationRootPath + "GameData/GPWS/PluginData/settings.cfg");
             if (node.HasNode("GPWS_SETTINGS"))
             {
                 node = node.GetNode("GPWS_SETTINGS");

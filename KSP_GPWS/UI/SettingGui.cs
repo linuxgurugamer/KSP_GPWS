@@ -9,11 +9,12 @@ using System.Text;
 using UnityEngine;
 using KSP_GPWS.SimpleTypes;
 using KSP_GPWS.Interfaces;
+using ClickThroughFix;
 
-namespace KSP_GPWS.UI
+namespace KSP_GPWS
 {
     [KSPAddon(KSPAddon.Startup.Flight, false)]
-    class SettingGui : MonoBehaviour
+    internal class SettingGui : MonoBehaviour
     {
         private bool isHideUI = false;
 
@@ -28,9 +29,9 @@ namespace KSP_GPWS.UI
         private IPlaneConfig planeConfig;
         private ILanderConfig landerConfig;
 
-        GUIStyle toggleStyle;
-        GUIStyle buttonStyle;
-        GUIStyle boxStyle;
+        internal static GUIStyle toggleStyle;
+        internal static GUIStyle buttonStyle;
+        internal static GUIStyle boxStyle;
 
         SimpleTypes.VesselType vesselType;
 
@@ -56,6 +57,7 @@ namespace KSP_GPWS.UI
         public static void toggleSettingGui(bool active)
         {
             Settings.guiIsActive = active;
+#if false
             if (!active)
             {
                 if (!(Settings.UseBlizzy78Toolbar && ToolbarManager.ToolbarAvailable) && GuiAppLaunchBtn.appBtn != null)
@@ -63,14 +65,16 @@ namespace KSP_GPWS.UI
                     GuiAppLaunchBtn.appBtn.SetFalse(false);
                 }
             }
+#endif
             Settings.SaveToXml();
         }
 
+#if true
         public static void toggleSettingGui()
         {
             toggleSettingGui(!Settings.guiIsActive);
         }
-
+#endif
         public void HideUI()
         {
             isHideUI = true;
@@ -83,7 +87,7 @@ namespace KSP_GPWS.UI
 
         public void OnGUI()
         {
-            if (Settings.guiIsActive && !isHideUI)
+            if ( Settings.guiIsActive &&  !isHideUI)
             {
                 GUI.skin = HighLogic.Skin;
                 // on showConfigs changed: resize window, save config
@@ -99,12 +103,12 @@ namespace KSP_GPWS.UI
                     Settings.guiwindowPosition.height = 50;
                 }
                 // draw
-                Settings.guiwindowPosition = GUILayout.Window("GPWSSetting".GetHashCode(), Settings.guiwindowPosition,
+                Settings.guiwindowPosition = ClickThruBlocker.GUILayoutWindow("GPWSSetting".GetHashCode(), Settings.guiwindowPosition,
                         WindowFunc, "GPWS Setting", GUILayout.ExpandHeight(true));
             }
         }
 
-        private void ConfigureStyles()
+        internal static void ConfigureStyles()
         {
             if (toggleStyle == null)
             {
@@ -139,7 +143,9 @@ namespace KSP_GPWS.UI
         {
             planeConfig = Settings.PlaneConfig;
             landerConfig = Settings.LanderConfig;
-            ConfigureStyles();
+
+            // Following now done one time in the RegisterToolbar method
+            //ConfigureStyles();
 
             // begin drawing
             GUILayout.BeginHorizontal();
@@ -162,14 +168,17 @@ namespace KSP_GPWS.UI
                 vesselType = Gpws.ActiveVesselType;
                 if (vesselType != SimpleTypes.VesselType.NONE)
                 {
+                    GUILayout.BeginHorizontal();
                     showConfigs = GUILayout.Toggle(
-                            showConfigs, String.Format("select {0} function", vesselType.ToString().ToLower()),
-                            buttonStyle, GUILayout.Width(200), GUILayout.Height(20));
+                            showConfigs, String.Format("Show {0} settings", vesselType.ToString().ToLower()),
+                            buttonStyle, GUILayout.Width(150), GUILayout.Height(20));
 
                     if (showConfigs)
                     {
                         drawSetting();
                     }
+                    else
+                        GUILayout.EndHorizontal();
                 }
             }
             GUILayout.EndVertical();
@@ -177,8 +186,13 @@ namespace KSP_GPWS.UI
 
         private void drawSetting()
         {
-            Settings.ChangeVesselType = GUILayout.Toggle(Settings.ChangeVesselType, "change vessel type",
-                    buttonStyle, GUILayout.Width(200), GUILayout.Height(20));
+            //if (GUILayout.Button("Change Vessel Type", buttonStyle, GUILayout.Width(200), GUILayout.Height(20)))
+            if (GUILayout.Button("Type", buttonStyle, GUILayout.Width(60), GUILayout.Height(20)))
+                {
+                    Settings.ChangeVesselType = !Settings.ChangeVesselType;
+            }
+            GUILayout.EndHorizontal();
+            //Settings.ChangeVesselType = GUILayout.Toggle(Settings.ChangeVesselType, "change vessel type", buttonStyle, GUILayout.Width(200), GUILayout.Height(20));
             // volume
             GUILayout.Label(String.Format("Volume: {0}%", Math.Round(Settings.Volume * 100.0f)));
             Settings.Volume = (float)Math.Round(GUILayout.HorizontalSlider(Settings.Volume, 0.0f, 1.0f), 2);
