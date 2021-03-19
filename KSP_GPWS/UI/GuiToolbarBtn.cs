@@ -30,19 +30,19 @@ namespace KSP_GPWS
                     MODNAME
                 );
             }
-
-            void ToggleOn()
-            {
-                SettingGui.toggleSettingGui(true);
-                //appBtn.SetFalse(false);
-            }
-            void ToggleOff()
-            {
-                SettingGui.toggleSettingGui(false);
-                //appBtn.SetFalse(false);
-            }
-
         }
+        void ToggleOn()
+        {
+            SettingGui.toggleSettingGui(true);
+            //appBtn.SetFalse(false);
+        }
+        void ToggleOff()
+        {
+            SettingGui.toggleSettingGui(false);
+            //appBtn.SetFalse(false);
+        }
+
+
 
         public void OnDestroy()
         {
