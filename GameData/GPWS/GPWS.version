@@ -1,30 +1,26 @@
 {
-    "NAME":"GPWS",
-    "URL":"https://ksp.spacetux.net/avc/GPWS",
-    "DOWNLOAD":"https://github.com/linuxgurugamer/KSP_GPWS/releases",
-    "GITHUB":
-    {
-        "USERNAME":"bssthu",
-        "REPOSITORY":"KSP_GPWS",
-        "ALLOW_PRE_RELEASE":true,
+    "NAME": "GPWS",
+    "URL": "http://ksp.spacetux.net/avc/GPWS",
+    "DOWNLOAD": "https://github.com/linuxgurugamer/KSP_GPWS/releases",
+    "GITHUB": {
+        "USERNAME": "linuxgurugamer",
+        "REPOSITORY": "KSP_GPWS",
+        "ALLOW_PRE_RELEASE": true,
     },
-    "VERSION":
-    {
-        "MAJOR":0,
-        "MINOR":4,
-        "PATCH":0,
-        "BUILD":0
+    "VERSION": {
+        "MAJOR": 0,
+        "MINOR": 4,
+        "PATCH": 0,
+        "BUILD": 0
     },
-    "KSP_VERSION":
-    {
-        "MAJOR":1,
-        "MINOR":8,
-        "PATCH":1
+    "KSP_VERSION": {
+        "MAJOR": 1,
+        "MINOR": 8,
+        "PATCH": 1
     },
-    "KSP_VERSION_MIN":
-    {
-        "MAJOR":1,
-        "MINOR":8,
-        "PATCH":1
+    "KSP_VERSION_MIN": {
+        "MAJOR": 1,
+        "MINOR": 8,
+        "PATCH": 1
     }
 } 
