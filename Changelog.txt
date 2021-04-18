@@ -9,7 +9,9 @@ Changelog
 
 	Changed method of determining whether vessel is a plane or not from looking at the landing gear to using the vesseltype
 	Change volume reference from VoiceVolume to max of Voicevolume and SHIP_VOLUME
-	Fixed GearUp not playing
 	Updated text on setting screen a bit to make it make more sense
 	Updated MM config to include KSPWheel and stock wheel in code to determine if has gear or not
 	Moved initialization of button styles into Registertoolbar, now only does 1x and avoids unnecessary if's in the OnGUI loop
+
+0.4.0.1
+	updated version file for the version access to be http
