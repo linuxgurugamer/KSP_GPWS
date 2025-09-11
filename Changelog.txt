@@ -19,3 +19,6 @@ Changelog
 0.4.0.2
 	Added AssemblyFileVersion
 	Updated version file for 1.12
+
+0.4.0.3
+	Updated version file to use github for new version info
